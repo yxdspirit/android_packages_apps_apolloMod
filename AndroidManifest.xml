@@ -22,7 +22,7 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
         android:allowTaskReparenting="true"
@@ -58,14 +58,17 @@
         <activity
             android:name=".activities.MusicLibrary"
             android:label="@string/app_name"
-        	android:logo="@drawable/ic_logo"
+            android:logo="@drawable/ic_logo"
             android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MUSIC_PLAYER" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.APP_MUSIC" />
             </intent-filter>
             <intent-filter>
@@ -100,10 +103,10 @@
             android:name=".activities.PlayExternal"
             android:clearTaskOnLaunch="true"
             android:excludeFromRecents="true"
-            android:noHistory="true"
+            android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.Light.Translucent"
-            android:label="@string/app_name" >
+            android:noHistory="true"
+            android:theme="@style/Theme.Light.Translucent" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -140,16 +143,15 @@
         <!-- Settings -->
         <activity
             android:name=".preferences.SettingsHolder"
-        	android:logo="@drawable/ic_logo"
-            android:label="@string/settings" />
+            android:label="@string/settings"
+            android:logo="@drawable/ic_logo" />
         <!-- Simple EQ -->
         <activity
             android:name=".activities.SimpleEq"
             android:excludeFromRecents="true"
             android:label="@string/simple_eq_page_title"
-            android:windowSoftInputMode="adjustPan" 
-        	android:parentActivityName=".activities.MusicLibrary" />
-
+            android:parentActivityName=".activities.MusicLibrary"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".menu.PlaylistDialog"
             android:label="@string/rename_playlist"
