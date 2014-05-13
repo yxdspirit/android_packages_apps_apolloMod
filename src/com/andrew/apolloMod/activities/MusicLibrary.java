@@ -75,13 +75,14 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection 
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
+//请求新特性actionbar悬浮
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         // Landscape mode on phone isn't ready
         if (!ApolloUtils.isTablet(this))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
         // Scan for music
+        //请求新特性
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);       
        // getSupportFragmentManager().beginTransaction().add(R.id.bottomactionbar_new, new BottomActionBarFragment(), "bottomactionbar_new").commit();
         
@@ -97,7 +98,7 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection 
         mPanel.setAnchorPoint(0);
         
         mPanel.setDragView(findViewById(R.id.bottom_action_bar_dragview));
-        mPanel.setShadowDrawable(getResources().getDrawable(R.drawable.above_shadow));
+//        mPanel.setShadowDrawable(getResources().getDrawable(R.drawable.above_shadow));
         mPanel.setAnchorPoint(0.0f);
         mPanel.setPanelSlideListener(new PanelSlideListener() {
             @Override
