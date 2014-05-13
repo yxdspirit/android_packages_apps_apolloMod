@@ -1140,7 +1140,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
             }
             stop(false);
             mCursor = getCursorForId(mPlayList[mPlayPos]);
-            if (mCursor == null ) {
+            if (mCursor == null||mCursor.getCount()==0) {
                 return;
             }
             while(!open(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/" + mCursor.getLong(IDCOLIDX))) {
@@ -2067,7 +2067,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
 
     public String getArtistName() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null||mCursor.getCount()==0) {
                 return getString(R.string.unknown);
             }
             return mCursor.getString(mCursor.getColumnIndexOrThrow(AudioColumns.ARTIST));
@@ -2085,7 +2085,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
 
     public String getAlbumName() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null||mCursor.getCount()==0) {
                 return getString(R.string.unknown);
             }
             return mCursor.getString(mCursor.getColumnIndexOrThrow(AudioColumns.ALBUM));
@@ -2094,7 +2094,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
 
     public long getAlbumId() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null||mCursor.getCount()==0) {
                 return -1;
             }
             return mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.ALBUM_ID));
@@ -2107,7 +2107,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
 
     public String getTrackName() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null||mCursor.getCount()==0) {
                 return getString(R.string.unknown);
             }
             return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaColumns.TITLE));
