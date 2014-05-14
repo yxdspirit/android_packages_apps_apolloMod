@@ -16,7 +16,9 @@
 
 package com.andrew.apolloMod.ui.widgets;
 
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
@@ -98,7 +100,6 @@ public class ScrollableTabView extends HorizontalScrollView implements
             mContainer.addView(tab);
 
             tab.setFocusable(true);
-
             mTabs.add(tab);
 
             tab.setOnClickListener(new OnClickListener() {

@@ -1,7 +1,6 @@
 /**
  * 
  */
-
 package com.andrew.apolloMod.activities;
 
 import java.util.Arrays;
@@ -27,6 +26,7 @@ import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Audio.AudioColumns;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -60,186 +60,195 @@ import static com.andrew.apolloMod.Constants.TABS_ENABLED;
  * @author Andrew Neal
  * @Note This is the "holder" for all of the tabs
  */
-public class MusicLibrary extends FragmentActivity implements ServiceConnection {
-	
-	private SlidingUpPanelLayout mPanel;
-    
-	private ServiceToken mToken;
-    
-	public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
-    
-	BottomActionBarFragment mBActionbar;
-    
-	private boolean isAlreadyStarted = false;	
-    
+public class MusicLibrary extends FragmentActivity implements ServiceConnection
+{
+    private SlidingUpPanelLayout mPanel;
+    private ServiceToken mToken;
+    public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
+    BottomActionBarFragment mBActionbar;
+    private boolean isAlreadyStarted = false;
+
     @Override
-    protected void onCreate(Bundle icicle) {
+    protected void onCreate(Bundle icicle)
+    {
         super.onCreate(icicle);
-//请求新特性actionbar悬浮
+        // 请求新特性actionbar悬浮
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         // Landscape mode on phone isn't ready
         if (!ApolloUtils.isTablet(this))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        
         // Scan for music
-        //请求新特性
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);       
-       // getSupportFragmentManager().beginTransaction().add(R.id.bottomactionbar_new, new BottomActionBarFragment(), "bottomactionbar_new").commit();
-        
+        // 请求新特性
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        // getSupportFragmentManager().beginTransaction().add(R.id.bottomactionbar_new,
+        // new BottomActionBarFragment(), "bottomactionbar_new").commit();
         // Layout
         setContentView(R.layout.library_browser);
-        
-        mBActionbar =(BottomActionBarFragment) getSupportFragmentManager().findFragmentById(R.id.bottomactionbar_new);
-  
+        mBActionbar = (BottomActionBarFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.bottomactionbar_new);
         mBActionbar.setUpQueueSwitch(this);
-        
         mPanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-
         mPanel.setAnchorPoint(0);
-        
         mPanel.setDragView(findViewById(R.id.bottom_action_bar_dragview));
-//        mPanel.setShadowDrawable(getResources().getDrawable(R.drawable.above_shadow));
+        // mPanel.setShadowDrawable(getResources().getDrawable(R.drawable.above_shadow));
         mPanel.setAnchorPoint(0.0f);
-        mPanel.setPanelSlideListener(new PanelSlideListener() {
+        mPanel.setPanelSlideListener(new PanelSlideListener()
+        {
             @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-                if (slideOffset < 0.2) {
+            public void onPanelSlide(View panel, float slideOffset)
+            {
+                if (slideOffset < 0.2)
+                {
                     mBActionbar.onExpanded();
-                    if (getActionBar().isShowing()) {
+                    if (getActionBar().isShowing())
+                    {
                         getActionBar().hide();
                     }
-                } else {
+                }
+                else
+                {
                     mBActionbar.onCollapsed();
-                    if (!getActionBar().isShowing()) {
+                    if (!getActionBar().isShowing())
+                    {
                         getActionBar().show();
                     }
                 }
             }
+
             @Override
-            public void onPanelExpanded(View panel) {
+            public void onPanelExpanded(View panel)
+            {
             }
+
             @Override
-            public void onPanelCollapsed(View panel) {
+            public void onPanelCollapsed(View panel)
+            {
             }
+
             @Override
-            public void onPanelAnchored(View panel) {
+            public void onPanelAnchored(View panel)
+            {
             }
         });
-        
         String startedFrom = getIntent().getStringExtra("started_from");
-        if(startedFrom!=null){
-        	ViewTreeObserver vto = mPanel.getViewTreeObserver();
-        	vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-        	    @Override
-        	    public void onGlobalLayout() {
-        	    	if(!isAlreadyStarted){
-            	        mPanel.expandPane();
-            	        isAlreadyStarted=true;
-        	    	}
-        	    }
-        	});
+        if (startedFrom != null)
+        {
+            ViewTreeObserver vto = mPanel.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
+            {
+                @Override
+                public void onGlobalLayout()
+                {
+                    if (!isAlreadyStarted)
+                    {
+                        mPanel.expandPane();
+                        isAlreadyStarted = true;
+                    }
+                }
+            });
         }
-        
         // Style the actionbar
         initActionBar();
-
         // Control Media volume
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        
         // Important!
-        initPager();  
+        initPager();
     }
+
     @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-    	if(mPanel.isExpanded()){
+    public void onBackPressed()
+    {
+        // super.onBackPressed();
+        if (mPanel.isExpanded())
+        {
             mPanel.collapsePane();
-    	}
-    	else{
-    		super.onBackPressed();
-    	}
+        }
+        else
+        {
+            super.onBackPressed();
+        }
     }
-    
+
     @Override
-    public void onServiceConnected(ComponentName name, IBinder obj) {
+    public void onServiceConnected(ComponentName name, IBinder obj)
+    {
         MusicUtils.mService = IApolloService.Stub.asInterface(obj);
     }
 
     @Override
-    public void onServiceDisconnected(ComponentName name) {
+    public void onServiceDisconnected(ComponentName name)
+    {
         MusicUtils.mService = null;
     }
 
     @Override
-    protected void onStart() {
-
+    protected void onStart()
+    {
         // Bind to Service
         mToken = MusicUtils.bindToService(this, this);
-
         IntentFilter filter = new IntentFilter();
         filter.addAction(ApolloService.META_CHANGED);
         super.onStart();
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         // Unbind
         if (MusicUtils.mService != null)
             MusicUtils.unbindFromService(mToken);
-
-        //TODO: clear image cache
-
+        // TODO: clear image cache
         super.onStop();
     }
 
     /**
      * Initiate ViewPager and PagerAdapter
      */
-    public void initPager() {
+    public void initPager()
+    {
         // Initiate PagerAdapter
-        PagerAdapter mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
-
-        //Get tab visibility preferences
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        Set<String> defaults = new HashSet<String>(Arrays.asList(
-        		getResources().getStringArray(R.array.tab_titles)
-        	));
-        Set<String> tabs_set = sp.getStringSet(TABS_ENABLED,defaults);
-        //if its empty fill reset it to full defaults
-        	//stops app from crashing when no tabs are shown
-        	//TODO:rewrite activity to not crash when no tabs are chosen to show
-        if(tabs_set.size()==0){
-        	tabs_set = defaults;
+        PagerAdapter mPagerAdapter = new PagerAdapter(
+                getSupportFragmentManager());
+        // Get tab visibility preferences
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        Set<String> defaults = new HashSet<String>(Arrays.asList(getResources()
+                .getStringArray(R.array.tab_titles)));
+        Set<String> tabs_set = sp.getStringSet(TABS_ENABLED, defaults);
+        // if its empty fill reset it to full defaults
+        // stops app from crashing when no tabs are shown
+        // TODO:rewrite activity to not crash when no tabs are chosen to show
+        if (tabs_set.size() == 0)
+        {
+            tabs_set = defaults;
         }
-        
-        //Only show tabs that were set in preferences
+        // Only show tabs that were set in preferences
         // Recently added tracks
-        if(tabs_set.contains(getResources().getString(R.string.tab_recent)))
-        	mPagerAdapter.addFragment(new RecentlyAddedFragment());
+        if (tabs_set.contains(getResources().getString(R.string.tab_recent)))
+            mPagerAdapter.addFragment(new RecentlyAddedFragment());
         // Artists
-        if(tabs_set.contains(getResources().getString(R.string.tab_artists)))
-        	mPagerAdapter.addFragment(new ArtistsFragment());
+        if (tabs_set.contains(getResources().getString(R.string.tab_artists)))
+            mPagerAdapter.addFragment(new ArtistsFragment());
         // Albums
-        if(tabs_set.contains(getResources().getString(R.string.tab_albums)))
-        	mPagerAdapter.addFragment(new AlbumsFragment());
+        if (tabs_set.contains(getResources().getString(R.string.tab_albums)))
+            mPagerAdapter.addFragment(new AlbumsFragment());
         // // Tracks
-        if(tabs_set.contains(getResources().getString(R.string.tab_songs)))
-        	mPagerAdapter.addFragment(new SongsFragment());
+        if (tabs_set.contains(getResources().getString(R.string.tab_songs)))
+            mPagerAdapter.addFragment(new SongsFragment());
         // // Playlists
-        if(tabs_set.contains(getResources().getString(R.string.tab_playlists)))
-        	mPagerAdapter.addFragment(new PlaylistsFragment());
+        if (tabs_set.contains(getResources().getString(R.string.tab_playlists)))
+            mPagerAdapter.addFragment(new PlaylistsFragment());
         // // Genres
-        if(tabs_set.contains(getResources().getString(R.string.tab_genres)))
-        	mPagerAdapter.addFragment(new GenresFragment());
-
+        if (tabs_set.contains(getResources().getString(R.string.tab_genres)))
+            mPagerAdapter.addFragment(new GenresFragment());
         // Initiate ViewPager
-        ViewPager mViewPager = (ViewPager)findViewById(R.id.viewPager);
-        mViewPager.setPageMargin(getResources().getInteger(R.integer.viewpager_margin_width));
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        mViewPager.setPageMargin(getResources().getInteger(
+                R.integer.viewpager_margin_width));
         mViewPager.setPageMarginDrawable(R.drawable.viewpager_margin);
         mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
         mViewPager.setAdapter(mPagerAdapter);
-        //mViewPager.setCurrentItem(0);
-
+        // mViewPager.setCurrentItem(0);
         // Tabs
         initScrollableTabs(mViewPager);
     }
@@ -247,51 +256,60 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection 
     /**
      * Initiate the tabs
      */
-    public void initScrollableTabs(ViewPager mViewPager) {
-        ScrollableTabView mScrollingTabs = (ScrollableTabView)findViewById(R.id.scrollingTabs);
-        ScrollingTabsAdapter mScrollingTabsAdapter = new ScrollingTabsAdapter(this);
+    public void initScrollableTabs(ViewPager mViewPager)
+    {
+        ScrollableTabView mScrollingTabs = (ScrollableTabView) findViewById(R.id.scrollingTabs);
+        ScrollingTabsAdapter mScrollingTabsAdapter = new ScrollingTabsAdapter(
+                this);
         mScrollingTabs.setAdapter(mScrollingTabsAdapter);
         mScrollingTabs.setViewPager(mViewPager);
     }
-    
+
     /**
      * For the theme chooser
      */
-    private void initActionBar() {
-    	ActionBar actBar = getActionBar();
-    	actBar.setDisplayUseLogoEnabled(true);
-        actBar.setDisplayShowTitleEnabled(false);
+    private void initActionBar()
+    {
+        ActionBar actBar = getActionBar();
+        actBar.setLogo(R.drawable.ic_launcher);
+        actBar.setTitle(R.string.app_name);
+       
+        actBar.setDisplayUseLogoEnabled(true);
+        actBar.setDisplayShowTitleEnabled(true);
     }
-    
+
     /**
      * Respond to clicks on actionbar options
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-	        case R.id.action_search:
-	            onSearchRequested();
-	            break;
-
-	        case R.id.action_settings:
-	        	startActivityForResult(new Intent(this, SettingsHolder.class),0);
-	            break;
-
-	        case R.id.action_eqalizer:
-	    	    final Intent intent = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
-	            if (getPackageManager().resolveActivity(intent, 0) == null) {
-		        	startActivity(new Intent(this, SimpleEq.class));
-	        	}
-	        	else{
-	        		intent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, MusicUtils.getCurrentAudioId());
-	        		startActivity(intent);
-	        	}
-	            break;
-
-	        case R.id.action_shuffle_all:
-	        	shuffleAll();
-	            break;
-
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.action_search:
+                onSearchRequested();
+                break;
+            case R.id.action_settings:
+                startActivityForResult(new Intent(this, SettingsHolder.class),
+                        0);
+                break;
+            case R.id.action_eqalizer:
+                final Intent intent = new Intent(
+                        AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
+                if (getPackageManager().resolveActivity(intent, 0) == null)
+                {
+                    startActivity(new Intent(this, SimpleEq.class));
+                }
+                else
+                {
+                    intent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, MusicUtils
+                            .getCurrentAudioId());
+                    startActivity(intent);
+                }
+                break;
+            case R.id.action_shuffle_all:
+                shuffleAll();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -300,36 +318,50 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-    	Intent i = getBaseContext().getPackageManager()
-	             .getLaunchIntentForPackage( getBaseContext().getPackageName() );
-		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(i);
+        Intent i = getBaseContext().getPackageManager()
+                .getLaunchIntentForPackage(getBaseContext().getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
-    
+
     /**
      * Initiate the Top Actionbar
      */
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.actionbar_top, menu);
-	    return true;
-	}
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionbar_top, menu);
+        return true;
+    }
 
-	/**
+    /**
      * Shuffle all the tracks
      */
-    public void shuffleAll() {
+    public void shuffleAll()
+    {
         Uri uri = Audio.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = new String[] {
-            BaseColumns._ID
-        };
+        String[] projection = new String[] { BaseColumns._ID };
         String selection = AudioColumns.IS_MUSIC + "=1";
         String sortOrder = "RANDOM()";
-        Cursor cursor = MusicUtils.query(this, uri, projection, selection, null, sortOrder);
-        if (cursor != null) {
+        Cursor cursor = MusicUtils.query(this, uri, projection, selection,
+                null, sortOrder);
+        if (cursor != null)
+        {
             MusicUtils.shuffleAll(this, cursor);
             cursor.close();
             cursor = null;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            finish();
+            MusicUtils.unbindFromService(mToken);
+//            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

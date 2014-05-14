@@ -11,7 +11,7 @@
         android:id="@+id/bottom_action_bar_info_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_action_bar_divider_height"
-        android:background="@color/holo_blue_dark"
+        android:background="@color/danhuang"
         tools:ignore="ContentDescription" />
 
     <com.andrew.apolloMod.ui.widgets.BottomActionBar

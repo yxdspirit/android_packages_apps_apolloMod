@@ -12,6 +12,7 @@
 
     <!-- A semi-transparent dark Holo shade of blue -->
     <color name="holo_blue_dark">#ff0099cc</color>
+    <color name="danhuang">#ffe66f</color>
     
     <color name="shuffle_grey">#ffdedede</color>
 
