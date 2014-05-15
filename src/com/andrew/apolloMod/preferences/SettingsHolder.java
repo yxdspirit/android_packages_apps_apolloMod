@@ -4,6 +4,13 @@
 
 package com.andrew.apolloMod.preferences;
 
+import static com.andrew.apolloMod.Constants.BUILD_DEPENDS;
+import static com.andrew.apolloMod.Constants.BUILD_VERSION;
+import static com.andrew.apolloMod.Constants.DELETE_CACHE;
+import static com.andrew.apolloMod.Constants.WIDGET_STYLE;
+
+import java.io.IOException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -29,14 +36,10 @@ import android.widget.TextView;
 import com.andrew.apolloMod.IApolloService;
 import com.andrew.apolloMod.R;
 import com.andrew.apolloMod.cache.ImageProvider;
+import com.andrew.apolloMod.helpers.utils.ImageUtils;
 import com.andrew.apolloMod.helpers.utils.MusicUtils;
 import com.andrew.apolloMod.service.ApolloService;
 import com.andrew.apolloMod.service.ServiceToken;
-
-import static com.andrew.apolloMod.Constants.WIDGET_STYLE;
-import static com.andrew.apolloMod.Constants.DELETE_CACHE;
-import static com.andrew.apolloMod.Constants.BUILD_VERSION;
-import static com.andrew.apolloMod.Constants.BUILD_DEPENDS;
 
 @SuppressWarnings("deprecation")
 public class SettingsHolder extends PreferenceActivity  implements ServiceConnection  {
@@ -57,7 +60,15 @@ public class SettingsHolder extends PreferenceActivity  implements ServiceConnec
         initChangeWidgetTheme();
         
         // Init delete cache option
-        initDeleteCache();
+        try
+        {
+            initDeleteCache();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         
         // Init about dialog
         initAboutDialog();
@@ -150,9 +161,14 @@ public class SettingsHolder extends PreferenceActivity  implements ServiceConnec
     }
     /**
      * Removes all of the cache entries.
+     * @throws IOException 
      */
-    private void initDeleteCache() {
+    private void initDeleteCache() throws IOException {
         final Preference deleteCache = findPreference(DELETE_CACHE);
+        
+        String cachelength = ImageUtils.queryDiskCache(mContext);
+        
+        deleteCache.setSummary("当前缓存："+cachelength);
         deleteCache.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
@@ -161,13 +177,14 @@ public class SettingsHolder extends PreferenceActivity  implements ServiceConnec
                         	@Override
                             public void onClick(final DialogInterface dialog, final int which) {                        		
                                 ImageProvider.getInstance( (Activity) mContext ).clearAllCaches();
+                                deleteCache.setSummary("当前缓存：0.0KB");
                             }
                         }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(final DialogInterface dialog, final int which) {
                                 dialog.dismiss();
-                            }
+                            } 
                         }).create().show();
                 return true;
             }

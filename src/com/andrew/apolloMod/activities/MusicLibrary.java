@@ -15,6 +15,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.audiofx.AudioEffect;
 import android.net.Uri;
@@ -38,6 +39,7 @@ import com.andrew.apolloMod.IApolloService;
 import com.andrew.apolloMod.R;
 import com.andrew.apolloMod.ui.adapters.PagerAdapter;
 import com.andrew.apolloMod.ui.adapters.ScrollingTabsAdapter;
+import com.andrew.apolloMod.ui.adapters.list.OnlineFragment;
 import com.andrew.apolloMod.ui.fragments.BottomActionBarFragment;
 import com.andrew.apolloMod.ui.fragments.grid.AlbumsFragment;
 import com.andrew.apolloMod.ui.fragments.grid.ArtistsFragment;
@@ -241,6 +243,9 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection
         // // Genres
         if (tabs_set.contains(getResources().getString(R.string.tab_genres)))
             mPagerAdapter.addFragment(new GenresFragment());
+        //NEW
+        if (tabs_set.contains(getResources().getString(R.string.tab_online)))
+            mPagerAdapter.addFragment(new OnlineFragment());
         // Initiate ViewPager
         ViewPager mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mViewPager.setPageMargin(getResources().getInteger(
@@ -273,7 +278,8 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection
         ActionBar actBar = getActionBar();
         actBar.setLogo(R.drawable.ic_launcher);
         actBar.setTitle(R.string.app_name);
-       
+        Drawable acbarBg=getResources().getDrawable(R.drawable.bar_bg);
+        actBar.setBackgroundDrawable(acbarBg);
         actBar.setDisplayUseLogoEnabled(true);
         actBar.setDisplayShowTitleEnabled(true);
     }
