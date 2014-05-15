@@ -59,6 +59,7 @@
         <ImageButton
             android:id="@+id/audio_player_play"
             style="@style/AudioPlayerButton"
+            android:scaleType="fitCenter"
             android:contentDescription="@string/cd_play"
             android:src="@drawable/apollo_holo_light_pause" />
 

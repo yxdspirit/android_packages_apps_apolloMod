@@ -29,14 +29,18 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
 	        android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:descendantFocusability="blocksDescendants"
+            >
 	        <ImageView
 	            android:id="@+id/bottom_action_bar_album_art"
 	            android:layout_width="@dimen/bottom_action_bar_album_art_width_height"
 	            android:layout_height="@dimen/bottom_action_bar_album_art_width_height"
 	            android:layout_gravity="left|center"
+	            android:paddingLeft="6dp"
 	            android:contentDescription="@string/cd_bottom_action_bar_album_art"
-	            android:scaleType="fitXY" />
+	            android:scaleType="fitXY" 
+	            android:focusable="false"/>
 	
 	            <TextView
 	                android:id="@+id/bottom_action_bar_track_name"
@@ -45,7 +49,8 @@
 	                android:paddingLeft="@dimen/bottom_action_bar_padding_left"
 	                android:textColor="@color/transparent_black"
 	                android:textSize="@dimen/text_size_micro"
-	                android:textStyle="bold" />
+	                android:textStyle="bold" 
+	                android:focusable="false"/>
 	
 	            <TextView
 	                android:id="@+id/bottom_action_bar_artist_name"
@@ -54,7 +59,8 @@
 	                android:layout_below="@+id/bottom_action_bar_track_name"
 	                android:layout_toRightOf="@+id/bottom_action_bar_album_art"
 	                android:textSize="@dimen/text_size_micro"
-	                android:textColor="@color/transparent_black" />
+	                android:textColor="@color/transparent_black"
+	                android:focusable="false" />
 	    </RelativeLayout>
         
         <ImageButton
@@ -73,7 +79,7 @@
             android:id="@+id/bottom_action_bar_next"
             style="@style/BottomActionBarItem"
             android:contentDescription="@string/cd_next"
-            android:src="@drawable/apollo_holo_light_next" />      
+            android:src="@drawable/apollo_holo_light_next" />
               
         <ImageButton
             android:id="@+id/bottom_action_bar_switch_queue"
