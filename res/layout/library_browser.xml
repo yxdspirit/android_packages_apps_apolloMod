@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+ <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -65,66 +65,5 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
         </LinearLayout>
-    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
-
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
-        android:id="@+id/sliding_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background_grey"
-            android:clickable="true"
-            android:focusable="false"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical"
-            android:paddingTop="?android:attr/actionBarSize" >
-
-            <com.andrew.apolloMod.ui.widgets.ScrollableTabView
-                android:id="@+id/scrollingTabs"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/tab_height"
-                android:background="@color/white" />
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/scrollingTabs" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:clickable="true"
-            android:focusable="false"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:id="@+id/bottom_action_bar_container2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/bottom_action_bar_height"
-                android:layout_gravity="top"
-                android:orientation="vertical" >
-
-                <fragment
-                    android:id="@+id/bottomactionbar_new"
-                    android:name="com.andrew.apolloMod.ui.fragments.BottomActionBarFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <fragment
-                android:id="@+id/audio_player_view"
-                android:name="com.andrew.apolloMod.ui.fragments.AudioPlayerFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-        </LinearLayout>
-    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+ </com.sothree.slidinguppanel.SlidingUpPanelLayout> 
 </RelativeLayout>
